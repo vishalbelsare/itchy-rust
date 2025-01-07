@@ -1,5 +1,6 @@
-use nom::{be_u8, IResult};
+use nom::{bytes::streaming::take, combinator::map_opt, number::streaming::be_u8, IResult};
 
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum EventCode {
     StartOfMessages,
@@ -10,6 +11,7 @@ pub enum EventCode {
     EndOfMessages,
 }
 
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum MarketCategory {
     NasdaqGlobalSelect,
@@ -23,6 +25,7 @@ pub enum MarketCategory {
     Unavailable,
 }
 
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum FinancialStatus {
     Normal,
@@ -38,6 +41,7 @@ pub enum FinancialStatus {
     Unavailable,
 }
 
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum IssueClassification {
     AmericanDepositaryShare,
@@ -59,7 +63,7 @@ pub enum IssueClassification {
 }
 
 pub(crate) fn parse_issue_classification(input: &[u8]) -> IResult<&[u8], IssueClassification> {
-    map_opt!(input, be_u8, |v| {
+    map_opt(be_u8, |v| {
         use IssueClassification::*;
         Some(match v {
             b'A' => AmericanDepositaryShare,
@@ -80,9 +84,10 @@ pub(crate) fn parse_issue_classification(input: &[u8]) -> IResult<&[u8], IssueCl
             b'W' => Warrant,
             _ => return None,
         })
-    })
+    })(input)
 }
 
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum IssueSubType {
     PreferredTrustSecurities,
@@ -146,8 +151,9 @@ pub enum IssueSubType {
 }
 
 pub(crate) fn parse_issue_subtype(input: &[u8]) -> IResult<&[u8], IssueSubType> {
-    map_opt!(input, take!(2), |v: &[u8]| {
+    map_opt(take(2usize), |v: &[u8]| {
         use IssueSubType::*;
+
         Some(match v {
             b"A " => PreferredTrustSecurities,
             b"AI" => AlphaIndexETNs,
@@ -209,9 +215,10 @@ pub(crate) fn parse_issue_subtype(input: &[u8]) -> IResult<&[u8], IssueSubType> 
             b"Z " => NotApplicable,
             _ => return None,
         })
-    })
+    })(input)
 }
 
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum LuldRefPriceTier {
     Tier1,
@@ -219,6 +226,7 @@ pub enum LuldRefPriceTier {
     Na,
 }
 
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum MarketMakerMode {
     Normal,
@@ -228,6 +236,7 @@ pub enum MarketMakerMode {
     Penalty,
 }
 
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum MarketParticipantState {
     Active,
@@ -237,6 +246,7 @@ pub enum MarketParticipantState {
     Deleted,
 }
 
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum RegShoAction {
     None,
@@ -244,6 +254,7 @@ pub enum RegShoAction {
     Extant,
 }
 
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum TradingState {
     Halted,
@@ -252,12 +263,14 @@ pub enum TradingState {
     Trading,
 }
 
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum Side {
     Buy,
     Sell,
 }
 
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum ImbalanceDirection {
     Buy,
@@ -266,20 +279,24 @@ pub enum ImbalanceDirection {
     InsufficientOrders,
 }
 
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum CrossType {
     Opening,
     Closing,
     IpoOrHalted,
     Intraday,
+    ExtendedTradingClose,
 }
 
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum IpoReleaseQualifier {
     Anticipated,
     Cancelled,
 }
 
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum LevelBreached {
     L1,
@@ -287,6 +304,7 @@ pub enum LevelBreached {
     L3,
 }
 
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum InterestFlag {
     RPIAvailableBuySide,

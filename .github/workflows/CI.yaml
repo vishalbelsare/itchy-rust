@@ -1,0 +1,18 @@
+on: [push, pull_request]
+
+name: CI
+
+jobs:
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: dtolnay/rust-toolchain@stable
+
+      - name: Test
+        run: cargo test
+
+      - name: Test with serde
+        run: cargo test --features serde

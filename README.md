@@ -1,19 +1,19 @@
 # itchy
 
-[![Build Status](https://travis-ci.org/adwhit/itchy-rust.svg?branch=master)](https://travis-ci.org/adwhit/itchy-rust)
+![Build Status](https://github.com/adwhit/itchy-rust/workflows/CI/badge.svg)
 [![Crates.io Version](https://img.shields.io/crates/v/itchy.svg)](https://crates.io/crates/itchy)
 
 ITCH parser library for Rust. Implements the NASDAQ 5.0 spec which can be found [here](http://www.nasdaqtrader.com/content/technicalsupport/specifications/dataproducts/NQTVITCHSpecification_5.0.pdf).
 
 It is zero-allocation (thanks [nom](http://github.com/geal/nom)!)
-pretty fast, parsing around 20M messages/second on my XPS 9370.
+and pretty fast, parsing around 20M messages/second on my not-fast laptop.
 
 ## Usage
 
 Add this to your `Cargo.toml`:
 ```toml
 [dependencies]
-itchy = "0.2"
+itchy = "0.3"
 ```
 
 Simple usage example:
@@ -25,4 +25,4 @@ for msg in stream {
 }
 ```
 
-See the [API docs](https://docs.rs/itchy/0.2.0/) for more information.
+See the [API docs](https://docs.rs/itchy/latest/itchy/) for more information.
